@@ -87,9 +87,9 @@ public class Timer {
      * @throws TimerException if this Timer is not running.
      */
     public void pauseAndLap() {
+        pause();
         lap();
-        ticks += getClock();
-        running = false;
+
     }
 
     /**
@@ -121,8 +121,8 @@ public class Timer {
      * @throws TimerException if this Timer is not running.
      */
     public void pause() {
-        pauseAndLap();
-        laps--;
+        ticks += getClock();
+        running = false;
     }
 
     /**
@@ -173,8 +173,7 @@ public class Timer {
      * @return the number of ticks for the system clock. Currently defined as nano time.
      */
     private static long getClock() {
-        // TO BE IMPLEMENTED
-        return 0;
+        return System.nanoTime();
     }
 
     /**
@@ -186,7 +185,7 @@ public class Timer {
      */
     private static double toMillisecs(long ticks) {
         // TO BE IMPLEMENTED
-        return 0;
+        return ticks/1e6;
     }
 
     final static LazyLogger logger = new LazyLogger(Timer.class);
@@ -207,4 +206,9 @@ public class Timer {
             super(cause);
         }
     }
+
+    public static void main(String args[]) {
+        System.out.println(getClock());
+    }
+
 }
