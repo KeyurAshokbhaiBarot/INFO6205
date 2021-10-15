@@ -9,7 +9,6 @@ public class Keyur {
     int y = x;
     x = 2;
         System.out.println(y);
-        Poin
 
     }
 }

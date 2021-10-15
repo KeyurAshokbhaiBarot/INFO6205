@@ -85,6 +85,7 @@ public class UF_HWQUPC implements UF {
         while(root != parent[root]) {
             root = parent[root];
         }
+        if (pathCompression) doPathCompression(p);
         return root;
     }
 
@@ -99,6 +100,7 @@ public class UF_HWQUPC implements UF {
      *                                  both {@code 0 <= p < n} and {@code 0 <= q < n}
      */
     public boolean connected(int p, int q) {
+
         return find(p) == find(q);
     }
 
@@ -175,17 +177,21 @@ public class UF_HWQUPC implements UF {
         if(connected(i,j))
             return;
 
-        int root1 = find(i);
-        int root2 = find(j);
+        //int root1 = find(i);
+        //int root2 = find(j);
 
-        if (height[root1] < height[root2]) {
-            height[root2] += height[root1];
-            parent[root1] = root2;
-            height[root1] = 0;
+        if (height[i] < height[j]) {
+            updateParent(i, j);
+            updateHeight(j, i);
+            //height[root2] += height[root1];
+            //parent[root1] = root2;
+            //height[root1] = 0;
         } else {
-            height[root1] += height[root2];
-            parent[root2] = root1;
-            height[root2] = 0;
+            updateParent(j, i);
+            updateHeight(i, j);
+            //height[root1] += height[root2];
+            //parent[root2] = root1;
+            //height[root2] = 0;
         }
     }
 
@@ -195,11 +201,9 @@ public class UF_HWQUPC implements UF {
     private void doPathCompression(int i) {
         // TO BE IMPLEMENTED update parent to value of grandparent
 
-        int root = i;
-        while(i != root) {
-            int next = parent[i];
-            parent[i] = root;
-            i = next;
+        while(i != parent[i]) {
+            parent[i] = parent[parent[i]];
+            i = parent[i];
         }
     }
 }
