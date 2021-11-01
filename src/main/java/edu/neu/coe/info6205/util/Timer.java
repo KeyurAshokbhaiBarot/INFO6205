@@ -11,6 +11,7 @@ public class Timer {
      * Construct a new Timer and set it running.
      */
     public Timer() {
+
         resume();
     }
 
@@ -55,7 +56,22 @@ public class Timer {
     public <T, U> double repeat(int n, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
         logger.trace("repeat: with " + n + " runs");
         // TO BE IMPLEMENTED: note that the timer is running when this method is called and should still be running when it returns.
-        return 0;
+
+        for (int i = 0; i < n; i++) {
+            pause();
+            T x = supplier.get();
+            if(preFunction != null)
+                preFunction.apply(x);
+            resume();
+            U u = function.apply(x);
+            pause();
+            if(postFunction!=null)
+                postFunction.accept(u);
+            resume();
+            lap();
+        }
+        pause();
+        return meanLapTime();
     }
 
     /**
@@ -87,8 +103,9 @@ public class Timer {
      * @throws TimerException if this Timer is not running.
      */
     public void pauseAndLap() {
-        pause();
         lap();
+        ticks += getClock();
+        running = false;
 
     }
 
@@ -121,8 +138,8 @@ public class Timer {
      * @throws TimerException if this Timer is not running.
      */
     public void pause() {
-        ticks += getClock();
-        running = false;
+        pauseAndLap();
+        laps--;
     }
 
     /**
@@ -151,16 +168,19 @@ public class Timer {
 
     // NOTE: Used by unit tests
     private long getTicks() {
+
         return ticks;
     }
 
     // NOTE: Used by unit tests
     private int getLaps() {
+
         return laps;
     }
 
     // NOTE: Used by unit tests
     private boolean isRunning() {
+
         return running;
     }
 
@@ -173,6 +193,7 @@ public class Timer {
      * @return the number of ticks for the system clock. Currently defined as nano time.
      */
     private static long getClock() {
+
         return System.nanoTime();
     }
 
@@ -185,7 +206,8 @@ public class Timer {
      */
     private static double toMillisecs(long ticks) {
         // TO BE IMPLEMENTED
-        return ticks/1e6;
+        ticks/=1000000.0;
+        return ticks;
     }
 
     final static LazyLogger logger = new LazyLogger(Timer.class);

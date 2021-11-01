@@ -110,7 +110,7 @@ public class TimerTest {
     @Test
     public void testRepeat2() {
         final Timer timer = new Timer();
-        final int zzz = 20;
+        final int zzz = 35;
         final double mean = timer.repeat(10, () -> zzz, t -> {
             GoToSleep(t, 0);
             return null;
@@ -125,7 +125,7 @@ public class TimerTest {
     @Test // Slow
     public void testRepeat3() {
         final Timer timer = new Timer();
-        final int zzz = 20;
+        final int zzz = 35;
         final double mean = timer.repeat(10, () -> zzz, t -> {
             GoToSleep(t, 0);
             return null;

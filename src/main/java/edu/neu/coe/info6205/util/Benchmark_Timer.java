@@ -8,6 +8,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import edu.neu.coe.info6205.graphs.BFS_and_prims.StdRandom;
+import edu.neu.coe.info6205.sort.elementary.InsertionSort;
+import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Collections;
 
 import static edu.neu.coe.info6205.util.Utilities.formatWhole;
 
@@ -38,6 +44,7 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
      * @return at least 2 and at most m/10.
      */
     static int getWarmupRuns(int m) {
+
         return Integer.max(2, Integer.min(10, m / 10));
     }
 
@@ -116,6 +123,7 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
      *                    Function f is the function whose timing you want to measure. For example, you might create a function which sorts an array.
      */
     public Benchmark_Timer(String description, Consumer<T> f) {
+
         this(description, null, f, null);
     }
 
@@ -125,4 +133,52 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+
+
+    public static void main(String args[]) {
+
+        InsertionSort is = new InsertionSort();
+        Random random = new Random();
+        for (int k = 1; k <= 4; k++) {
+            int n = 1000;
+            for (int i = 0; i < 5; i++) {
+                Integer[] arr = new Integer[n];
+                for (int j = 0; j < n; j++) {
+                    arr[j] = random.nextInt();
+                }
+
+                if(k==2){
+                    Arrays.sort(arr);
+                    System.out.print("Mean time for sorted array of size " + n + " is ");
+                    System.out.println();
+                }
+                else if(k==3){
+                    Arrays.sort(arr, n/2, n);
+                    System.out.print("Mean time for partially sorted array of size " + n + " is " );
+                    System.out.println();
+                }
+                else if(k==4){
+                    Arrays.sort(arr, Collections.reverseOrder());
+                    System.out.print("Mean time for a reverse ordered array of size " + n + " is " );
+                    System.out.println();
+                }
+                else{
+                    System.out.print("Mean time for a randomly sorted array of size " + n + " is " );
+                    System.out.println();
+                }
+                int temp = n;
+                Timer timer = new Timer();
+                final double time = timer.repeat(50, () -> 5, t -> {
+                    is.sort(arr, 0, temp);
+                    return null;
+                });
+
+                System.out.println(time);
+
+                n = n * 2;
+            }
+
+        }
+
+    }
 }
