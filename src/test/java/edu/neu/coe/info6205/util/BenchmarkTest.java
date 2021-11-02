@@ -25,7 +25,7 @@ public class BenchmarkTest {
             return null;
         },
                 b -> {
-                    GoToSleep(200L, 0);
+                    GoToSleep(250L, 0);
                 },
                 b -> {
                     GoToSleep(50L, 1);
@@ -34,7 +34,7 @@ public class BenchmarkTest {
         assertEquals(nRuns, post);
         assertEquals(nRuns + warmups, run);
         assertEquals(nRuns + warmups, pre);
-        assertEquals(200, x, 10);
+        assertEquals(250, x, 10);
     }
 
     private void GoToSleep(long mSecs, int which) {

@@ -135,50 +135,77 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
+            int m=25;
+            int initialLength=1000;
+            int MAX=1000000;
+            InsertionSort<Integer> insertSort=new InsertionSort<Integer>();
+            Consumer<Integer[]> consumer=array->insertSort.sort(array, 0, array.length);
+            Benchmark_Timer<Integer[]> benchmarkTimer = new Benchmark_Timer<Integer[]>("Insertion Sort", consumer);
 
-        InsertionSort is = new InsertionSort();
-        Random random = new Random();
-        for (int k = 1; k <= 4; k++) {
-            int n = 1000;
-            for (int i = 0; i < 5; i++) {
-                Integer[] arr = new Integer[n];
-                for (int j = 0; j < n; j++) {
-                    arr[j] = random.nextInt();
-                }
+            System.out.println("RANDOMLY ORDERED ARRAY");
 
-                if(k==2){
-                    Arrays.sort(arr);
-                    System.out.print("Mean time for sorted array of size " + n + " is ");
-                    System.out.println();
-                }
-                else if(k==3){
-                    Arrays.sort(arr, n/2, n);
-                    System.out.print("Mean time for partially sorted array of size " + n + " is " );
-                    System.out.println();
-                }
-                else if(k==4){
-                    Arrays.sort(arr, Collections.reverseOrder());
-                    System.out.print("Mean time for a reverse ordered array of size " + n + " is " );
-                    System.out.println();
-                }
-                else{
-                    System.out.print("Mean time for a randomly sorted array of size " + n + " is " );
-                    System.out.println();
-                }
-                int temp = n;
-                Timer timer = new Timer();
-                final double time = timer.repeat(50, () -> 5, t -> {
-                    is.sort(arr, 0, temp);
-                    return null;
-                });
-
-                System.out.println(time);
-
-                n = n * 2;
+            for (int i = initialLength; i < 20000; i += i) {
+                int doublingLength=i;
+                Supplier<Integer[]> supplier = () -> {  //Supplier to generate respective array
+                    Integer[] a = new Integer[doublingLength];
+                    for (int j = 0; j < doublingLength; j++)
+                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
+                    return a;
+                };
+                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
             }
 
-        }
+            System.out.print("\n");
+            System.out.println("ORDERED ARRAY");
 
-    }
+            for (int i = initialLength; i < 20000; i += i) {
+                int doublingLength=i;
+
+                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
+                    Integer[] a = new Integer[doublingLength];
+                    for (int j = 0; j < doublingLength; j++)
+                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
+                    Arrays.sort(a);//Sorting
+                    return a;
+                };
+
+                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
+            }
+
+            System.out.print("\n");
+            System.out.println("PARTIALLY ORDERED ARRAY");
+
+            for (int i = initialLength; i < 20000; i += i) {
+                int doublingLength=i;
+                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
+                    Integer[] a = new Integer[doublingLength];
+                    for (int j = 0; j < doublingLength; j++)
+                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
+
+                    Arrays.sort(a);//Sort
+
+                    for (int j = 0; j < doublingLength/2; j++)
+                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers half-way through  with uniform distribution
+
+                    return a;
+                };
+                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
+            }
+
+            System.out.print("\n");
+            System.out.println("REVERSE ORDERED ARRAY");
+
+            for (int i = initialLength; i < 20000; i += i) {
+                int doublingLength=i;
+                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
+                    Integer[] a = new Integer[doublingLength];
+                    for (int j = 0; j < doublingLength; j++)
+                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
+                    Arrays.sort(a, Collections.reverseOrder());//Sorting in reverse order
+                    return a;
+                };
+                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
+            }
+        }
 }
