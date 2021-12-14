@@ -4,12 +4,23 @@
 
 package edu.neu.coe.info6205.util;
 
+import java.sql.SQLOutput;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import edu.neu.coe.info6205.graphs.BFS_and_prims.StdRandom;
+import edu.neu.coe.info6205.sort.BaseHelper;
+//import edu.neu.coe.info6205.sort.QuickSort_DualPivot;
+import edu.neu.coe.info6205.sort.counting.LSDStringSort;
+import edu.neu.coe.info6205.sort.counting.MSDStringSort;
 import edu.neu.coe.info6205.sort.elementary.InsertionSort;
+import edu.neu.coe.info6205.sort.huskySort.PureHuskySort;
+import edu.neu.coe.info6205.sort.huskySortUtils.HuskyCoder;
+import edu.neu.coe.info6205.sort.huskySortUtils.HuskyCoderFactory;
+import edu.neu.coe.info6205.sort.linearithmic.QuickSort_DualPivot;
+import edu.neu.coe.info6205.sort.linearithmic.TimSort;
+
 import java.util.*;
 import java.util.Arrays;
 import java.util.Random;
@@ -136,76 +147,74 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
 
 
     public static void main(String[] args) {
-            int m=25;
-            int initialLength=1000;
-            int MAX=1000000;
-            InsertionSort<Integer> insertSort=new InsertionSort<Integer>();
-            Consumer<Integer[]> consumer=array->insertSort.sort(array, 0, array.length);
-            Benchmark_Timer<Integer[]> benchmarkTimer = new Benchmark_Timer<Integer[]>("Insertion Sort", consumer);
 
-            System.out.println("RANDOMLY ORDERED ARRAY");
+        int m=25;
+        //int[] numberOfLines = {250000, 500000, 1000000, 2000000, 4000000};
+        int[] numberOfLines = {5000,10000};
 
-            for (int i = initialLength; i < 20000; i += i) {
-                int doublingLength=i;
-                Supplier<Integer[]> supplier = () -> {  //Supplier to generate respective array
-                    Integer[] a = new Integer[doublingLength];
-                    for (int j = 0; j < doublingLength; j++)
-                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
-                    return a;
-                };
-                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
-            }
+        MSDStringSort msdStringSort = new MSDStringSort();
 
-            System.out.print("\n");
-            System.out.println("ORDERED ARRAY");
+        Consumer<String[]> consumer = array -> msdStringSort.sort(array);
+        Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);
+        System.out.println("MSDStringSort");
 
-            for (int i = initialLength; i < 20000; i += i) {
-                int doublingLength=i;
-
-                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
-                    Integer[] a = new Integer[doublingLength];
-                    for (int j = 0; j < doublingLength; j++)
-                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
-                    Arrays.sort(a);//Sorting
-                    return a;
-                };
-
-                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
-            }
-
-            System.out.print("\n");
-            System.out.println("PARTIALLY ORDERED ARRAY");
-
-            for (int i = initialLength; i < 20000; i += i) {
-                int doublingLength=i;
-                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
-                    Integer[] a = new Integer[doublingLength];
-                    for (int j = 0; j < doublingLength; j++)
-                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
-
-                    Arrays.sort(a);//Sort
-
-                    for (int j = 0; j < doublingLength/2; j++)
-                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers half-way through  with uniform distribution
-
-                    return a;
-                };
-                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
-            }
-
-            System.out.print("\n");
-            System.out.println("REVERSE ORDERED ARRAY");
-
-            for (int i = initialLength; i < 20000; i += i) {
-                int doublingLength=i;
-                Supplier<Integer[]> supplier = () -> { //Supplier to generate respective array
-                    Integer[] a = new Integer[doublingLength];
-                    for (int j = 0; j < doublingLength; j++)
-                        a[j] = StdRandom.uniform(-MAX, MAX);//Generating random numbers with uniform distribution
-                    Arrays.sort(a, Collections.reverseOrder());//Sorting in reverse order
-                    return a;
-                };
-                System.out.println("N= " + doublingLength +", Time Taken: " + benchmarkTimer.runFromSupplier(supplier, m));
-            }
+        for (int i = 0; i < numberOfLines.length; i++) {
+            int lines = numberOfLines[i];
+            Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
         }
+
+        TimSort<String> timSort = new TimSort<String>(BaseHelper.getHelper(TimSort.class));
+
+        consumer = array -> timSort.sort(array,0 , array.length);
+        benchmarkTimer = new Benchmark_Timer<String[]>("TimSort", consumer);
+        System.out.println("TimSort");
+
+        for (int i = 0; i < numberOfLines.length; i++) {
+            int lines = numberOfLines[i];
+            Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+        }
+
+        LSDStringSort lsdStringSort = new LSDStringSort();
+
+        consumer = array -> lsdStringSort.sort(array);
+        benchmarkTimer = new Benchmark_Timer<String[]>("LSDStringSort", consumer);
+        System.out.println("LSDStringSort");
+
+        for (int i = 0; i < numberOfLines.length; i++) {
+            int lines = numberOfLines[i];
+            Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+        }
+
+
+        System.out.println("QuickSort_DualPivot");
+
+        for (int i = 0; i < numberOfLines.length; i++) {
+            QuickSort_DualPivot<String> quickSort_dualPivot = new QuickSort_DualPivot<String>(BaseHelper.getHelper(QuickSort_DualPivot.class));
+
+            consumer = array -> quickSort_dualPivot.sort(array);
+            benchmarkTimer = new Benchmark_Timer<String[]>("QuickSort_DualPivot", consumer);
+            int lines = numberOfLines[i];
+            Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+        }
+
+        PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, true,true);
+
+        consumer = array -> pureHuskySort.sort(array);
+        benchmarkTimer = new Benchmark_Timer<String[]>("PureHuskySort", consumer);
+        System.out.println("PureHuskySort");
+
+        for (int i = 0; i < numberOfLines.length; i++) {
+            int lines = numberOfLines[i];
+            Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+        }
+
+
+
+
+    }
 }

@@ -1,8 +1,12 @@
 package edu.neu.coe.info6205.sort.counting;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class LSDStringSort {
 
-    private final int ASCII_RANGE = 256;
+    private final int UNICODE_RANGE = 65536;
 
     /**
      * findMaxLength method returns maximum length of all available strings in an array
@@ -41,7 +45,7 @@ public class LSDStringSort {
      * @param to           This is the ending index up until which sorting operation will be continued
      */
     private void charSort(String[] strArr, int charPosition, int from, int to) {
-        int[] count = new int[ASCII_RANGE + 2];
+        int[] count = new int[UNICODE_RANGE + 2];
         String[] result = new String[strArr.length];
 
         for (int i = from; i <= to; i++) {
@@ -50,7 +54,7 @@ public class LSDStringSort {
         }
 
         // transform counts to indices
-        for (int r = 1; r < ASCII_RANGE + 2; r++)
+        for (int r = 1; r < UNICODE_RANGE + 2; r++)
             count[r] += count[r - 1];
 
         // distribute
@@ -83,5 +87,39 @@ public class LSDStringSort {
      */
     public void sort(String[] strArr) {
         sort(strArr, 0, strArr.length - 1);
+    }
+
+    public String[] getInputArray(int l) {
+        File file = new File("C:\\Users\\User\\Desktop\\n.txt");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(file);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        String[] a = new String[l];
+        int count = 0;
+        while(count < l) {
+            a[count] = sc.nextLine();
+            count ++;
+        }
+        sc.close();
+        return a;
+    }
+
+    public static void main(String[] args) {
+
+        LSDStringSort lsdStringSort = new LSDStringSort();
+
+        int count = 0;
+        MSDStringSort msdStringSort = new MSDStringSort();
+        String[] ucs = lsdStringSort.getInputArray(100);
+
+        lsdStringSort.sort(ucs);
+        for (int i = 0; i < ucs.length; i++){
+            System.out.println(ucs[i]);
+            count ++;
+        }
+        System.out.println(count);
     }
 }

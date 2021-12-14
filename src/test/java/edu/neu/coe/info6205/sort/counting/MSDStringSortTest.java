@@ -17,13 +17,14 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class MSDStringSortTest {
+    MSDStringSort msdStringSort = new MSDStringSort();
 
     String[] input = "she sells seashells by the seashore the shells she sells are surely seashells".split(" ");
     String[] expected = "are by seashells seashells seashore sells sells she she shells surely the the".split(" ");
 
     @Test
     public void sort() {
-        MSDStringSort.sort(input);
+        msdStringSort.sort(input);
         System.out.println(Arrays.toString(input));
         assertArrayEquals(expected, input);
     }
@@ -36,7 +37,7 @@ public class MSDStringSortTest {
         String[] words = getWords("3000-common-words.txt", MSDStringSortTest::lineAsList);
         final String[] xs = helper.random(String.class, r -> words[r.nextInt(words.length)]);
         assertEquals(n, xs.length);
-        MSDStringSort.sort(xs);
+        msdStringSort.sort(xs);
         assertEquals("African-American", xs[0]);
         assertEquals("Palestinian", xs[16]);
     }

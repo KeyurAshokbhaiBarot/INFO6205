@@ -2,6 +2,10 @@ package edu.neu.coe.info6205.sort.counting;
 
 import edu.neu.coe.info6205.sort.elementary.InsertionSortMSD;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /**
  * Class to implement Most significant digit string sort (a radix sort).
  */
@@ -12,7 +16,7 @@ public class MSDStringSort {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(String[] a) {
+    public void sort(String[] a) {
         int n = a.length;
         aux = new String[n];
         sort(a, 0, n, 0);
@@ -41,6 +45,9 @@ public class MSDStringSort {
             if (hi - lo >= 0) System.arraycopy(aux, 0, a, lo, hi - lo);
             // Recursively sort for each character value.
             // TO BE IMPLEMENTED
+            for (int r = 0; r < radix; r++) {
+                sort(a, lo + count[r], lo + count[r+1] - 1, d+1);
+            }
         }
     }
 
@@ -49,7 +56,38 @@ public class MSDStringSort {
         else return -1;
     }
 
-    private static final int radix = 256;
+    private static final int radix = 65536;
     private static final int cutoff = 15;
     private static String[] aux;       // auxiliary array for distribution
+
+    public String[] getInputArray(int l) {
+        File file = new File("C:\\Users\\User\\Downloads\\shuffledChinese4M.txt");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(file);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        String[] a = new String[l];
+        int count = 0;
+        while(count < l) {
+            a[count] = sc.nextLine();
+            count ++;
+        }
+        sc.close();
+        return a;
+    }
+
+    public static void main(String[] args) {
+        int count = 0;
+        MSDStringSort msdStringSort = new MSDStringSort();
+        String[] ucs = msdStringSort.getInputArray(250000);
+
+        msdStringSort.sort(ucs);
+        for (int i = 0; i < ucs.length; i++){
+            System.out.println(ucs[i]);
+            count ++;
+        }
+        System.out.println(count);
+    }
 }
