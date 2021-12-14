@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 import edu.neu.coe.info6205.graphs.BFS_and_prims.StdRandom;
 import edu.neu.coe.info6205.sort.BaseHelper;
 //import edu.neu.coe.info6205.sort.QuickSort_DualPivot;
+import edu.neu.coe.info6205.sort.DualPivotQuickSort;
 import edu.neu.coe.info6205.sort.counting.LSDStringSort;
 import edu.neu.coe.info6205.sort.counting.MSDStringSort;
 import edu.neu.coe.info6205.sort.elementary.InsertionSort;
@@ -148,14 +149,14 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
 
     public static void main(String[] args) {
 
-        int m=1;
-        //int[] numberOfLines = {250000, 500000, 1000000, 2000000, 4000000};
-        int[] numberOfLines = {5000,10000,25000,50000,100000};
+        int m=10;
+        int[] numberOfLines = {250000, 500000, 1000000, 2000000, 4000000};
+        //int[] numberOfLines = {5000,10000,25000,50000,100000};
         MSDStringSort msdStringSort = new MSDStringSort();
 
         Consumer<String[]> consumer = array -> msdStringSort.sort(array);
         Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);
-        /*System.out.println("MSDStringSort");
+        System.out.println("MSDStringSort");
 
         for (int i = 0; i < numberOfLines.length; i++) {
             int lines = numberOfLines[i];
@@ -185,7 +186,7 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
-        }*/
+        }
 
 
         System.out.println("QuickSort_DualPivot");
@@ -193,7 +194,8 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
 
         for (int i = 0; i < numberOfLines.length; i++) {
             QuickSort_DualPivot<String> quickSort_dualPivot = new QuickSort_DualPivot<String>(BaseHelper.getHelper(QuickSort_DualPivot.class));
-            consumer = array -> quickSort_dualPivot.sort(array);
+            DualPivotQuickSort dualPivotQuickSort = new DualPivotQuickSort();
+            consumer = array -> dualPivotQuickSort.sort(array);
             benchmarkTimer = new Benchmark_Timer<String[]>("QuickSort_DualPivot", consumer);
 
 
@@ -202,7 +204,7 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
         }
 
-        /*PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, false,false);
+        PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, false,false);
         benchmarkTimer = new Benchmark_Timer<String[]>("PureHuskySort", consumer);
         System.out.println("PureHuskySort");
 
@@ -210,6 +212,6 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
-        }*/
+        }
     }
 }

@@ -25,6 +25,7 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
      *
      * @param helper an explicit instance of Helper to be used.
      */
+
     public QuickSort_DualPivot(Helper<X> helper) {
         super(helper);
         setPartitioner(createPartitioner());
@@ -36,6 +37,7 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
      * @param N      the number elements we expect to sort.
      * @param config the configuration.
      */
+
     public QuickSort_DualPivot(int N, Config config) {
         this(DESCRIPTION, N, config);
     }
