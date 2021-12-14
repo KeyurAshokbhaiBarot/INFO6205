@@ -148,15 +148,14 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
 
     public static void main(String[] args) {
 
-        int m=25;
+        int m=1;
         //int[] numberOfLines = {250000, 500000, 1000000, 2000000, 4000000};
-        int[] numberOfLines = {5000,10000};
-
+        int[] numberOfLines = {5000,10000,25000,50000,100000};
         MSDStringSort msdStringSort = new MSDStringSort();
 
         Consumer<String[]> consumer = array -> msdStringSort.sort(array);
         Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);
-        System.out.println("MSDStringSort");
+        /*System.out.println("MSDStringSort");
 
         for (int i = 0; i < numberOfLines.length; i++) {
             int lines = numberOfLines[i];
@@ -186,24 +185,24 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
-        }
+        }*/
 
 
         System.out.println("QuickSort_DualPivot");
 
+
         for (int i = 0; i < numberOfLines.length; i++) {
             QuickSort_DualPivot<String> quickSort_dualPivot = new QuickSort_DualPivot<String>(BaseHelper.getHelper(QuickSort_DualPivot.class));
-
             consumer = array -> quickSort_dualPivot.sort(array);
             benchmarkTimer = new Benchmark_Timer<String[]>("QuickSort_DualPivot", consumer);
+
+
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
         }
 
-        PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, true,true);
-
-        consumer = array -> pureHuskySort.sort(array);
+        /*PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, false,false);
         benchmarkTimer = new Benchmark_Timer<String[]>("PureHuskySort", consumer);
         System.out.println("PureHuskySort");
 
@@ -211,10 +210,6 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
-        }
-
-
-
-
+        }*/
     }
 }

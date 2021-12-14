@@ -1,10 +1,15 @@
 package edu.neu.coe.info6205.sort.linearithmic;
 
+import edu.neu.coe.info6205.sort.BaseHelper;
 import edu.neu.coe.info6205.sort.Helper;
 import edu.neu.coe.info6205.util.Config;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
 
@@ -96,6 +101,44 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
         }
 
         private final Helper<X> helper;
+    }
+
+    public String[] getInputArray(int l) {
+        //File file = new File("C:\\Users\\User\\Desktop\\n.txt");
+        File file = new File("C:\\Users\\User\\Downloads\\shuffledChinese4M.txt");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(file);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        String[] a = new String[l];
+        int count = 0;
+        while(count < l) {
+            a[count] = sc.nextLine();
+            count ++;
+        }
+        sc.close();
+        return a;
+    }
+
+    public static void main(String[] args) throws IOException {
+        int count = 0;
+        /*MSDStringSort msdStringSort = new MSDStringSort();
+        String[] ucs = msdStringSort.getInputArray(250000);*/
+        //QuickSort_DualPivot quickSort_dualPivot = new QuickSort_DualPivot()
+        QuickSort_DualPivot<String> quickSort_dualPivot = new QuickSort_DualPivot<String>(BaseHelper.getHelper(QuickSort_DualPivot.class));
+        String[] ucs = quickSort_dualPivot.getInputArray(10000);
+
+
+        ucs = quickSort_dualPivot.sort(ucs);
+        //Arrays.sort(ucs);
+
+        for (int i = 0; i < ucs.length; i++){
+            System.out.println(ucs[i]);
+            count ++;
+        }
+        System.out.println(count);
     }
 }
 

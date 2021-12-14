@@ -59,7 +59,9 @@ public class Timer {
 
         for (int i = 0; i < n; i++) {
             pause();
+            //System.out.println("Input file reading started");
             T x = supplier.get();
+            //System.out.println("Input file reading done");
             if(preFunction != null)
                 preFunction.apply(x);
             resume();
