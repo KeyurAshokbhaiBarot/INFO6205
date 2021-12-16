@@ -152,66 +152,63 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
         int m=10;
         int[] numberOfLines = {250000, 500000, 1000000, 2000000, 4000000};
         //int[] numberOfLines = {5000,10000,25000,50000,100000};
+
         MSDStringSort msdStringSort = new MSDStringSort();
-
-        Consumer<String[]> consumer = array -> msdStringSort.sort(array);
-        Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);
         System.out.println("MSDStringSort");
-
+        /*Consumer<String[]> consumer = array -> msdStringSort.sort(array);
+        Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);*/
         for (int i = 0; i < numberOfLines.length; i++) {
+            Consumer<String[]> consumer = array -> msdStringSort.sort(array);
+            Benchmark_Timer<String[]> benchmarkTimer = new Benchmark_Timer<String[]>("MSDStringSort", consumer);
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
             System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
         }
 
         TimSort<String> timSort = new TimSort<String>(BaseHelper.getHelper(TimSort.class));
-
-        consumer = array -> timSort.sort(array,0 , array.length);
-        benchmarkTimer = new Benchmark_Timer<String[]>("TimSort", consumer);
+        //consumer = array -> timSort.sort(array,0 , array.length);
         System.out.println("TimSort");
-
         for (int i = 0; i < numberOfLines.length; i++) {
+            Consumer<String[]> consumer2 = array -> timSort.sort(array);
+            Benchmark_Timer<String[]> benchmarkTimer2 = new Benchmark_Timer<String[]>("TimSort", consumer2);
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
-            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer2.runFromSupplier(supplier, m));
         }
 
         LSDStringSort lsdStringSort = new LSDStringSort();
-
-        consumer = array -> lsdStringSort.sort(array);
-        benchmarkTimer = new Benchmark_Timer<String[]>("LSDStringSort", consumer);
+        //consumer = array -> lsdStringSort.sort(array);
         System.out.println("LSDStringSort");
-
         for (int i = 0; i < numberOfLines.length; i++) {
+            Consumer<String[]> consumer3 = array -> lsdStringSort.sort(array);
+            Benchmark_Timer<String[]> benchmarkTimer3 = new Benchmark_Timer<String[]>("LSDStringSort", consumer3);
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
-            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer3.runFromSupplier(supplier, m));
         }
 
 
         System.out.println("QuickSort_DualPivot");
-
-
         for (int i = 0; i < numberOfLines.length; i++) {
             QuickSort_DualPivot<String> quickSort_dualPivot = new QuickSort_DualPivot<String>(BaseHelper.getHelper(QuickSort_DualPivot.class));
             DualPivotQuickSort dualPivotQuickSort = new DualPivotQuickSort();
-            consumer = array -> dualPivotQuickSort.sort(array);
-            benchmarkTimer = new Benchmark_Timer<String[]>("QuickSort_DualPivot", consumer);
-
-
+            //consumer = array -> dualPivotQuickSort.sort(array);
+            Consumer<String[]> consumer4 = array -> dualPivotQuickSort.sort(array);
+            Benchmark_Timer<String[]> benchmarkTimer4 = new Benchmark_Timer<String[]>("QuickSort_DualPivot", consumer4);
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
-            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer4.runFromSupplier(supplier, m));
         }
 
         PureHuskySort<String> pureHuskySort = new PureHuskySort<String>(HuskyCoderFactory.chineseEncoder, false,false);
-        benchmarkTimer = new Benchmark_Timer<String[]>("PureHuskySort", consumer);
+        //consumer = array -> pureHuskySort.sort(array);
         System.out.println("PureHuskySort");
-
         for (int i = 0; i < numberOfLines.length; i++) {
+            Consumer<String[]> consumer5 = array -> pureHuskySort.sort(array);
+            Benchmark_Timer<String[]> benchmarkTimer5 = new Benchmark_Timer<String[]>("PureHuskySort", consumer5);
             int lines = numberOfLines[i];
             Supplier<String[]> supplier = () -> msdStringSort.getInputArray(lines);
-            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer.runFromSupplier(supplier, m));
+            System.out.println("Time Taken for "+lines+" :"+benchmarkTimer5.runFromSupplier(supplier, m));
         }
     }
 }

@@ -61,6 +61,7 @@ public class MSDStringSort {
     private static String[] aux;       // auxiliary array for distribution
 
     public String[] getInputArray(int l) {
+        //File file = new File("C:\\Users\\User\\Desktop\\n.txt");
         File file = new File("C:\\Users\\User\\Downloads\\shuffledChinese4M.txt");
         Scanner sc = null;
         try {
@@ -81,7 +82,7 @@ public class MSDStringSort {
     public static void main(String[] args) {
         int count = 0;
         MSDStringSort msdStringSort = new MSDStringSort();
-        String[] ucs = msdStringSort.getInputArray(250000);
+        String[] ucs = msdStringSort.getInputArray(4000000);
 
         msdStringSort.sort(ucs);
         for (int i = 0; i < ucs.length; i++){

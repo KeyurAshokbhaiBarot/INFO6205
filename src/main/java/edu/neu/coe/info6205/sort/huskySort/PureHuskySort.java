@@ -25,10 +25,11 @@ import static java.util.Arrays.binarySearch;
  */
 public class PureHuskySort<X extends Comparable<X>> {
 
-    public static void main(final String[] args) {
+    /*public static void main(final String[] args) {
 
         final int N = 50000;
-        final int m = 10000;
+        //final int m = 10000;
+        final int m = 1;
         logger.info("PureHuskySort.main: sorting " + N + " random alphabetic ASCII words " + m + " times");
         // Just for test purpose: this should take about 3 minutes
         final PureHuskySort<String> sorter = new PureHuskySort<>(HuskyCoderFactory.asciiCoder, false, false);
@@ -37,7 +38,7 @@ public class PureHuskySort<X extends Comparable<X>> {
             sorter.sort(alphaBetaArray);
         }
         logger.info("PureHuskySort.main: finished");
-    }
+    }*/
 
     /**
      * The main sort method.
@@ -227,4 +228,36 @@ public class PureHuskySort<X extends Comparable<X>> {
     private final boolean useInsertionSort;
 
     private final static LazyLogger logger = new LazyLogger(PureHuskySort.class);
+
+    public String[] getInputArray(int l) {
+        //File file = new File("C:\\Users\\User\\Desktop\\n.txt");
+        File file = new File("C:\\Users\\User\\Downloads\\shuffledChinese4M.txt");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(file);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        String[] a = new String[l];
+        int count = 0;
+        while(count < l) {
+            a[count] = sc.nextLine();
+            count ++;
+        }
+        sc.close();
+        return a;
+    }
+
+    public static void main(String[] args) {
+        int count = 0;
+        PureHuskySort<String> sorter = new PureHuskySort<>(HuskyCoderFactory.asciiCoder, false, false);
+        String[] ucs = sorter.getInputArray(100);
+
+        sorter.sort(ucs);
+        for (int i = 0; i < ucs.length; i++){
+            System.out.println(ucs[i]);
+            count ++;
+        }
+        System.out.println(count);
+    }
 }

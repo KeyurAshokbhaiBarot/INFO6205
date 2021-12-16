@@ -90,7 +90,8 @@ public class LSDStringSort {
     }
 
     public String[] getInputArray(int l) {
-        File file = new File("C:\\Users\\User\\Desktop\\n.txt");
+        //File file = new File("C:\\Users\\User\\Desktop\\n.txt");
+        File file = new File("C:\\Users\\User\\Downloads\\shuffledChinese4M.txt");
         Scanner sc = null;
         try {
             sc = new Scanner(file);
